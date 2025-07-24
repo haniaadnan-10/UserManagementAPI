@@ -9,6 +9,16 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// 1. Error Handling Middleware
+app.UseMiddleware<ErrorHandlingMiddleware>();
+
+// 2. Authentication Middleware
+app.UseMiddleware<AuthenticationMiddleware>();
+
+// 3. Logging Middleware
+app.UseMiddleware<LoggingMiddleware>();
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -46,26 +46,35 @@ app.MapGet("/", () => "Welcome to the User Management API!");
 // GET all users
 app.MapGet("/users", () => users);
 
-// GET user by ID
+// GET user by ID (with null check)
 app.MapGet("/users/{id}", (int id) =>
 {
-    var user = users.FirstOrDefault(u => u.Id == id);
-    return user is not null ? Results.Ok(user) : Results.NotFound();
+    var user = users.Find(u => u.Id == id);
+    return user is not null ? Results.Ok(user) : Results.NotFound("User not found.");
 });
 
-// POST new user
+// POST new user (with validation)
 app.MapPost("/users", (User newUser) =>
 {
+    if (string.IsNullOrWhiteSpace(newUser.FirstName) ||
+        string.IsNullOrWhiteSpace(newUser.LastName) ||
+        string.IsNullOrWhiteSpace(newUser.Email) ||
+        string.IsNullOrWhiteSpace(newUser.Department))
+    {
+        return Results.BadRequest("All fields are required.");
+    }
+
     newUser.Id = users.Count > 0 ? users.Max(u => u.Id) + 1 : 1;
     users.Add(newUser);
     return Results.Created($"/users/{newUser.Id}", newUser);
 });
 
+
 // PUT update user
 app.MapPut("/users/{id}", (int id, User updatedUser) =>
 {
-    var user = users.FirstOrDefault(u => u.Id == id);
-    if (user is null) return Results.NotFound();
+    var user = users.Find(u => u.Id == id);
+    if (user is null) return Results.NotFound("User not found.");
 
     user.FirstName = updatedUser.FirstName;
     user.LastName = updatedUser.LastName;

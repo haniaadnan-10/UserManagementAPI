@@ -1,0 +1,34 @@
+### GET all users
+GET http://localhost:5001/users
+
+### GET users by ID
+GET http://localhost:5001/users/1
+
+### Add new user
+POST http://localhost:5001/users
+Content-Type: application/json
+
+{
+  "firstName": "Charlie",
+  "lastName": "Brown",
+  "email": "charlie@techhive.com",
+  "department": "Finance"
+}
+
+
+
+### Updated an existing user
+PUT http://localhost:5001/users/1
+Content-Type: application/json
+
+{
+  "id": "1",
+  "firstName": "hania",
+  "lastName": "adnan",
+  "email": "haniae@techhive.com",
+  "department": "Software"
+}
+
+### Delete a user by ID
+DELETE http://localhost:5001/users/2
+
